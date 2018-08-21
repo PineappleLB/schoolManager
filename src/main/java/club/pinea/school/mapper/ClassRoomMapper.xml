@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="club.pinea.school.mapper.ClassRoomMapper" >
+  <resultMap id="BaseResultMap" type="club.pinea.school.model.ClassRoom" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="grade" property="grade" jdbcType="INTEGER" />
+    <result column="clazz" property="clazz" jdbcType="INTEGER" />
+    <result column="classname" property="classname" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, grade, clazz, classname
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from classroom
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from classroom
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="club.pinea.school.model.ClassRoom" >
+    insert into classroom (id, grade, clazz, 
+      classname)
+    values (#{id,jdbcType=INTEGER}, #{grade,jdbcType=INTEGER}, #{clazz,jdbcType=INTEGER}, 
+      #{classname,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="club.pinea.school.model.ClassRoom" >
+    insert into classroom
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="grade != null" >
+        grade,
+      </if>
+      <if test="clazz != null" >
+        clazz,
+      </if>
+      <if test="classname != null" >
+        classname,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="grade != null" >
+        #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="clazz != null" >
+        #{clazz,jdbcType=INTEGER},
+      </if>
+      <if test="classname != null" >
+        #{classname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="club.pinea.school.model.ClassRoom" >
+    update classroom
+    <set >
+      <if test="grade != null" >
+        grade = #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="clazz != null" >
+        clazz = #{clazz,jdbcType=INTEGER},
+      </if>
+      <if test="classname != null" >
+        classname = #{classname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="club.pinea.school.model.ClassRoom" >
+    update classroom
+    set grade = #{grade,jdbcType=INTEGER},
+      clazz = #{clazz,jdbcType=INTEGER},
+      classname = #{classname,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

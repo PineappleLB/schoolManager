@@ -1,6 +1,6 @@
 /target/
-logs/
-/logs/
+logs/*
+/logs/*
 ### STS ###
 .apt_generated
 .classpath

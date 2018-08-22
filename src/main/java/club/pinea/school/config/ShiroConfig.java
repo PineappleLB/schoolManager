@@ -42,14 +42,13 @@ public class ShiroConfig {
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
 		Map<String, String> map = new HashMap<>();
-		// 登出
-		map.put("/logout", "logout");
-		map.put("/test/**", "anon");
-		map.put("/login/**", "anon");
+		map.put("/test/**", "anon");//测试不需要认证
+		map.put("/login/**", "anon");//登录接口不需要认证
+		map.put("/noUser", "anon");//登录接口不需要认证
 		// 对所有用户认证
 		map.put("/**", "authc");
 		// 登录
-		shiroFilterFactoryBean.setLoginUrl("/login");
+		shiroFilterFactoryBean.setLoginUrl("/noUser");
 		// 首页
 		shiroFilterFactoryBean.setSuccessUrl("/index");
 		// 没有权限跳转的页面

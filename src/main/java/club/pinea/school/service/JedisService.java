@@ -26,4 +26,18 @@ public interface JedisService {
 	 */
 	SysUser authUser(String sessionId);
 
+	/**
+	 * 将redis里面存储的user数据删除
+	 * @param sessionId
+	 * @return
+	 */
+	int logout(String sessionId);
+
+	/**
+	 * 从redis中查询用户信息
+	 * @param sessionId
+	 * @return
+	 */
+	SysUser getUser(String sessionId);
+
 }

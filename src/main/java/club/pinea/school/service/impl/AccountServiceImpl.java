@@ -1,8 +1,6 @@
 package club.pinea.school.service.impl;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -45,29 +43,10 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	//根据用户id查询展示所有的菜单
-	//TODO 校验正确性
 	@Override
-	public Map<String, List<Map<String, Object>>> getUserAllMenuId(Integer userId, Integer roleId) {
-		Map<String, List<Map<String, Object>>> result =new LinkedHashMap<>();
+	public List<Map<String, Object>> getUserAllMenuId(Integer userId, Integer roleId) {
 		List<Map<String, Object>> list = sysUserMapper.getAllSysMenuList(roleId);
-		for(Map<String, Object> menu:list){
-			String pid = menu.get("pid").toString();
-			String pname = menu.get("pname").toString();
-			String key =pid+"-"+pname;
-			List<Map<String, Object>> mlist = result.get(key);
-			if(mlist==null){
-				mlist = new LinkedList<>();
-			}
-			mlist.add(menu);
-			result.put(key, mlist);
-		}
-//		for(Entry<String, List<Map<String, Object>>> a:result.entrySet()){
-//			System.out.println(a.getKey());
-//			System.out.println(a.getValue().size());
-//		}
-		return result;
+		return list;
 	}
-	
-	
 
 }

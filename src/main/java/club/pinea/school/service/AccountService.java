@@ -34,6 +34,6 @@ public interface AccountService {
 	 * @param userid
 	 * @return
 	 */
-	Map<String, List<Map<String, Object>>> getUserAllMenuId(Integer userId, Integer roleId);
+	List<Map<String, Object>> getUserAllMenuId(Integer userId, Integer roleId);
 
 }

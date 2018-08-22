@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
+
 import club.pinea.school.common.BaseController;
+import club.pinea.school.model.SysUser;
 import club.pinea.school.service.JedisService;
 import club.pinea.school.util.AjaxResult;
 import club.pinea.school.util.ShiroUtil;
@@ -49,6 +52,15 @@ public class LoginController extends BaseController{
 		}
 	}
 	
+	/**
+	 * 登录请求接口
+	 * @param account
+	 * @param password
+	 * @param code
+	 * @param sessionId
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping(value="/",method=RequestMethod.POST)
 	@ResponseBody
 	public AjaxResult login(@RequestParam("account")String account, @RequestParam("password")String password, 
@@ -81,9 +93,20 @@ public class LoginController extends BaseController{
 			log.error("account:"+account+" 未知错误");
 			return new AjaxResult().addError("账号或密码错误");
 		}
-		return new AjaxResult().success("登录成功");
+		SysUser user = ShiroUtil.getUser();
+		user.setPassword(null);
+		user.setSalt(null);
+		JSONObject obj = JSONObject.parseObject(JSONObject.toJSONString(user));
+		return new AjaxResult().success("登录成功")
+				.setData(obj);
 	}
 	
-	
+	@ResponseBody
+	@RequestMapping(value="/logout", method=RequestMethod.POST)
+	public AjaxResult logout(@RequestParam("sessionId")String sessionId) {
+		ShiroUtil.getSubject().logout();
+		jedisService.logout(sessionId);
+		return new AjaxResult().addSuccess("退出成功！");
+	}
 
 }

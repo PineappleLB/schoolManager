@@ -60,10 +60,8 @@
 	<select id="getAllSysMenuList" resultType="java.util.Map" parameterType="java.lang.Integer">
 		SELECT
 			d.id as id,
-			d.pid as pid,
 			d.mname as mname,
-			d.url as url,
-			e.mname AS pname
+			d.url as url
 		FROM
 		sys_role b
 		LEFT JOIN sys_role_menu c ON c.role_id = b.id

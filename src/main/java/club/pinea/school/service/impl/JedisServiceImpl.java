@@ -72,4 +72,25 @@ public class JedisServiceImpl implements JedisService {
 		return null;
 	}
 
+	@Override
+	public int logout(String sessionId) {
+		long result = jedisCluster.del(sessionId);
+		return (int)result;
+	}
+
+	@Override
+	public SysUser getUser(String sessionId) {
+		String str = jedisCluster.get(sessionId);
+		if(!StringUtils.isEmpty(str)) {
+			try {
+				//解析json对象
+				SysUser user = JSONObject.parseObject(str,SysUser.class);
+				return user;
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
 }

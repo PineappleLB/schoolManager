@@ -11,15 +11,25 @@ public enum FeedsType {
 	/**
 	 * 书本费
 	 */
-	BOOK_FEEDS,
+	BOOK_FEEDS("书本费"),
 	
 	/**
 	 * 学费
 	 */
-	STUDY_FEEDS,
+	STUDY_FEEDS("学费"),
 	
 	/**
 	 * 其他费用
 	 */
-	OTHER_FEEDS
+	OTHER_FEEDS("其他费用");
+	
+	private String name;
+	
+	FeedsType(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
 }

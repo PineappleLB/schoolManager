@@ -1,5 +1,7 @@
 package club.pinea.school.service.impl;
 
+import java.util.List;
+
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -91,6 +93,39 @@ public class JedisServiceImpl implements JedisService {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public int saveUser(String sessionId, SysUser user) {
+		try {
+			String userStr = JSONObject.toJSONString(user);
+			jedisCluster.setex(JedisCacheConfig.USER_PREFIX.getMsg(sessionId), Integer.parseInt(imgcodeTimeout), userStr);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	@Override
+	public void updateUserExpiryTime(String key) {
+		jedisCluster.expire(key, Integer.parseInt(imgcodeTimeout));
+	}
+
+	@Override
+	public int saveServerAddress(String localAddress) {
+		long result = jedisCluster.lpush(JedisCacheConfig.SERVER_ADDRESSES.getMsg(), localAddress);
+		return (int) result;
+	}
+
+	@Override
+	public int removeLocalAddress(String localAddress) {
+		long result = jedisCluster.lrem(JedisCacheConfig.SERVER_ADDRESSES.getMsg(), 0, localAddress);
+		return (int) result;
+	}
+
+	@Override
+	public List<String> getAllServerAddresses() {
+		return jedisCluster.lrange(JedisCacheConfig.SERVER_ADDRESSES.getMsg(), 0, -1);
 	}
 
 }

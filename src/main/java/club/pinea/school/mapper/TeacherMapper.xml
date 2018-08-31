@@ -103,4 +103,9 @@
       salt = #{salt,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="queryAllTeachers" resultType="club.pinea.school.model.Teacher">
+  	SELECT id, name FROM teacher
+  </select>
+  
 </mapper>

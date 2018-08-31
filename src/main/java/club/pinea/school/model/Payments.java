@@ -16,8 +16,18 @@ public class Payments {
     private Integer scope;
 
     private Integer classId;
+    
+    private String tips;
 
-    public Integer getId() {
+    public String getTips() {
+		return tips;
+	}
+
+	public void setTips(String tips) {
+		this.tips = tips;
+	}
+
+	public Integer getId() {
         return id;
     }
 

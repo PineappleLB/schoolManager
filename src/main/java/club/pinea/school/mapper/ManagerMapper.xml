@@ -90,4 +90,9 @@
       addtime = #{addtime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="queryAllManagers" resultType="club.pinea.school.model.Manager">
+  	SELECT id, account AS `name` FROM manager
+  </select>
+  
 </mapper>

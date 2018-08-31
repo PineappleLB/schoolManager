@@ -1,10 +1,15 @@
 package club.pinea.school.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.alibaba.fastjson.JSONObject;
 
 import club.pinea.school.common.BaseController;
 import club.pinea.school.config.ConstShiro;
@@ -30,6 +35,14 @@ public class TestController extends BaseController {
 	@RequestMapping("/testAop")
 	public String test() {
 		return "hello";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/testJson")
+	public String json(@RequestBody Map<String, Object> map) {
+		JSONObject obj = JSONObject.parseObject(JSONObject.toJSONString(map));
+		System.out.println(obj);
+		return obj.toJSONString();
 	}
 	
 }

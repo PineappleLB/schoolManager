@@ -9,9 +9,10 @@
     <result column="mid" property="mid" jdbcType="INTEGER" />
     <result column="scope" property="scope" jdbcType="INTEGER" />
     <result column="class_id" property="classId" jdbcType="INTEGER" />
+    <result column="tips" property="tips" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, type, money, add_time, mid, scope, class_id
+    id, type, money, add_time, mid, scope, class_id, tips
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -26,10 +27,10 @@
   <insert id="insert" parameterType="club.pinea.school.model.Payments" >
     insert into payments (id, type, money, 
       add_time, mid, scope, 
-      class_id)
+      class_id, tips)
     values (#{id,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{money,jdbcType=DOUBLE}, 
       #{addTime,jdbcType=TIMESTAMP}, #{mid,jdbcType=INTEGER}, #{scope,jdbcType=INTEGER}, 
-      #{classId,jdbcType=INTEGER})
+      #{classId,jdbcType=INTEGER}, #{tips,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="club.pinea.school.model.Payments" >
     insert into payments
@@ -55,6 +56,9 @@
       <if test="classId != null" >
         class_id,
       </if>
+      <if test="tips != null" >
+        tips,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -77,6 +81,9 @@
       </if>
       <if test="classId != null" >
         #{classId,jdbcType=INTEGER},
+      </if>
+      <if test="tips != null" >
+        #{tips,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -101,6 +108,9 @@
       <if test="classId != null" >
         class_id = #{classId,jdbcType=INTEGER},
       </if>
+      <if test="tips != null" >
+        tips = #{tips,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -111,7 +121,8 @@
       add_time = #{addTime,jdbcType=TIMESTAMP},
       mid = #{mid,jdbcType=INTEGER},
       scope = #{scope,jdbcType=INTEGER},
-      class_id = #{classId,jdbcType=INTEGER}
+      class_id = #{classId,jdbcType=INTEGER},
+      tips = #{tips,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

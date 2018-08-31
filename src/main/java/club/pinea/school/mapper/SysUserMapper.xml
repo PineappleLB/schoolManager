@@ -54,7 +54,9 @@
 		FROM
 			sys_role_menu srm LEFT JOIN sys_menu sm ON srm.menu_id = sm.id
 		WHERE
-			srm.role_id = #{roleId} AND sm.show=1 ORDER BY sm.order ASC
+			srm.role_id = #{roleId} 
+			AND sm.show = 1 
+			ORDER BY sm.order ASC
 	</select>
 	
 	<select id="getAllSysMenuList" resultType="java.util.Map" parameterType="java.lang.Integer">
@@ -69,6 +71,7 @@
 		LEFT JOIN sys_menu e ON d.pid = e.id
 		WHERE
 		b.id = #{roleId}
+		AND d.type != 3
 		AND d.`show` = 1
 		GROUP BY d.`id`
 		ORDER BY

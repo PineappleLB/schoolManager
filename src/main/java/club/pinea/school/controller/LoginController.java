@@ -77,7 +77,7 @@ public class LoginController extends BaseController{
 		//shior登录
 		Subject subject = ShiroUtil.getSubject();
 		UsernamePasswordToken token = new UsernamePasswordToken(account, password);
-		token.setRememberMe(true);
+//		token.setRememberMe(true);
 		try {
 			//dbrealm进行认证
 			subject.login(token);
@@ -96,6 +96,7 @@ public class LoginController extends BaseController{
 		SysUser user = ShiroUtil.getUser();
 		user.setPassword(null);
 		user.setSalt(null);
+		jedisService.saveUser(sessionId, user);
 		JSONObject obj = JSONObject.parseObject(JSONObject.toJSONString(user));
 		return new AjaxResult().success("登录成功")
 				.setData(obj);

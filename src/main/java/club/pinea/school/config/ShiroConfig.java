@@ -1,29 +1,58 @@
 package club.pinea.school.config;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-import org.apache.shiro.spring.LifecycleBeanPostProcessor;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.crazycake.shiro.IRedisManager;
+import org.crazycake.shiro.RedisCacheManager;
+import org.crazycake.shiro.RedisClusterManager;
+import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.apache.shiro.mgt.SecurityManager;
 
 import club.pinea.school.shiro.ShiroDBRealm;
+import redis.clients.jedis.HostAndPort;
+import redis.clients.jedis.JedisCluster;
 
 @Configuration
 public class ShiroConfig {
+	
+	@Value("${spring.redis.cluster.nodes}")
+	private String clusterNodes;
 
 	@Bean
 	public ShiroDBRealm shiroDbRealm() {
 		return new ShiroDBRealm();
 	}
+	
 
+	@Bean
+	public JedisCluster jedisCluster() {
+		// 截取集群节点
+		String[] cluster = clusterNodes.split(",");
+		// 创建set集合
+		Set<HostAndPort> nodes = new HashSet<HostAndPort>();
+		// 循环数组把集群节点添加到set集合中
+		for (String node : cluster) {
+			String[] host = node.split(":");
+			// 添加集群节点
+			nodes.add(new HostAndPort(host[0], Integer.parseInt(host[1])));
+		}
+		JedisCluster jc = new JedisCluster(nodes);
+		return jc;
+	}
+	
 	/**
 	 * 权限管理，配置主要是Realm的管理认证
 	 */
@@ -31,9 +60,56 @@ public class ShiroConfig {
 	public DefaultWebSecurityManager securityManager() {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 		securityManager.setRealm(shiroDbRealm());
+		// 自定义缓存实现 使用redis
+        securityManager.setCacheManager(cacheManager());
+        // 自定义session管理 使用redis
+        securityManager.setSessionManager(SessionManager());
 		return securityManager;
 	}
+	
+	/**
+     * shiro session的管理
+     */
+    public DefaultWebSessionManager SessionManager() {
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        sessionManager.setSessionDAO(redisSessionDAO());
+        return sessionManager;
+    }
+	
+	/**
+     * 配置shiro redisManager
+     * 
+     * @return
+     */
+    public IRedisManager redisManager() {
+    	RedisClusterManager redisManager = new RedisClusterManager();
+        redisManager.setHost(clusterNodes);
+        // redisManager.setTimeout(timeout);
+        // redisManager.setPassword(password);
+        return redisManager;
+    }
 
+    /**
+     * cacheManager 缓存 redis实现
+     * 
+     * @return
+     */
+    public RedisCacheManager cacheManager() {
+        RedisCacheManager redisCacheManager = new RedisCacheManager();
+        redisCacheManager.setRedisManager(redisManager());
+        return redisCacheManager;
+    }
+    
+    /**
+     * RedisSessionDAO shiro sessionDao层的实现 通过redis
+     */
+    public RedisSessionDAO redisSessionDAO() {
+        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
+        redisSessionDAO.setRedisManager(redisManager());
+        return redisSessionDAO;
+    }
+    
+    
 	/**
 	 * Filter工厂，设置对应的过滤条件和跳转条件
 	 */
@@ -87,14 +163,14 @@ public class ShiroConfig {
 		return new DefaultAdvisorAutoProxyCreator();
 	}
 
-	/**
-	 * 保证实现了Shiro内部lifecycle函数的bean执行
-	 * @return
-	 */
-	@Bean
-	public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
-		return new LifecycleBeanPostProcessor();
-	}
+//	/**
+//	 * 保证实现了Shiro内部lifecycle函数的bean执行
+//	 * @return
+//	 */
+//	@Bean
+//	public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
+//		return new LifecycleBeanPostProcessor();
+//	}
 
 	/**
 	 * 启用shrio授权注解拦截方式

@@ -1,5 +1,7 @@
 package club.pinea.school.mapper;
 
+import java.util.List;
+
 import club.pinea.school.model.Manager;
 
 public interface ManagerMapper {
@@ -14,4 +16,6 @@ public interface ManagerMapper {
     int updateByPrimaryKeySelective(Manager record);
 
     int updateByPrimaryKey(Manager record);
+
+	List<Manager> queryAllManagers();
 }

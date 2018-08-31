@@ -24,6 +24,7 @@ public class BaseController {
 	@ResponseBody
 	@ExceptionHandler(Exception.class)
 	public AjaxResult exceptionHandler(Exception ex, HttpServletResponse response, HttpServletRequest request) throws IOException  {
+		ex.printStackTrace();
 		if(ex instanceof NoPermissionException) {
 			return new AjaxResult().noPermissionError("");
 		} else if(ex instanceof NoUserException) {

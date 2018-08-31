@@ -1,5 +1,7 @@
 package club.pinea.school.service;
 
+import java.util.List;
+
 import club.pinea.school.model.SysUser;
 
 public interface JedisService {
@@ -39,5 +41,39 @@ public interface JedisService {
 	 * @return
 	 */
 	SysUser getUser(String sessionId);
+
+	/**
+	 * 登录成功保存用户信息
+	 * @param sessionId
+	 * @param user
+	 * @return
+	 */
+	int saveUser(String sessionId, SysUser user);
+
+	/**
+	 * 更新用户redis过期时间
+	 * @param msg
+	 */
+	void updateUserExpiryTime(String key);
+
+	/**
+	 * 保存服务器地址
+	 * @param localAddress
+	 * @return
+	 */
+	int saveServerAddress(String localAddress);
+
+	/**
+	 * 删除服务器地址
+	 * @param localAddress
+	 * @return
+	 */
+	int removeLocalAddress(String localAddress);
+
+	/**
+	 * 获取所有服务器地址
+	 * @return
+	 */
+	List<String> getAllServerAddresses();
 
 }

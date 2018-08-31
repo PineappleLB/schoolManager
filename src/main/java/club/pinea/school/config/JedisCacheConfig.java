@@ -13,7 +13,15 @@ public enum JedisCacheConfig {
 	 */
 	IMG_CODE(1, "PICTURE_CODE_"),
 	
+	/**
+	 * 用户缓存前缀
+	 */
+	USER_PREFIX(2, "USER_PREFIX_"),
 	
+	/**
+	 * 服务器列表前缀
+	 */
+	SERVER_ADDRESSES(3, "SERVER_ADDRESSES")
 	
 	;
 	

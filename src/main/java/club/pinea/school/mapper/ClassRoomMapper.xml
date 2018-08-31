@@ -7,6 +7,12 @@
     <result column="clazz" property="clazz" jdbcType="INTEGER" />
     <result column="classname" property="classname" jdbcType="VARCHAR" />
   </resultMap>
+  
+  <resultMap id="CollectiontMap" type="java.util.Map" >
+    <result column="grade" property="grade" jdbcType="INTEGER" />
+    <collection property="classes" column="grade" javaType="java.util.List" select="queryClasses"/>
+  </resultMap>
+  
   <sql id="Base_Column_List" >
     id, grade, clazz, classname
   </sql>
@@ -79,4 +85,17 @@
       classname = #{classname,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="queryAllGrades" resultMap="CollectiontMap">
+  	SELECT grade FROM classroom GROUP BY grade ORDER BY grade
+  </select>
+  
+  <select id="queryClasses" resultType="java.lang.String">
+  	SELECT clazz FROM classroom WHERE grade = #{grade} group by clazz order by clazz
+  </select>
+  
+  <select id="queryAllClassrooms" resultType="club.pinea.school.model.ClassRoom">
+  	SELECT id, classname AS `name` FROM classroom
+  </select>
+  
 </mapper>

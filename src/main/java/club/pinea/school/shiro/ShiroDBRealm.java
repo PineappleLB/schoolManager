@@ -28,6 +28,7 @@ public class ShiroDBRealm extends AuthorizingRealm{
 	private static final Logger log = LoggerFactory.getLogger(AuthorizingRealm.class);
 	@Autowired
 	private AccountService accountServcie;
+	
 
 	/**
 	 * shior-dbrealm用户角色认证
@@ -79,6 +80,7 @@ public class ShiroDBRealm extends AuthorizingRealm{
 		if(!dbusername.equals(inputusername)||!dbpassword.equals(ShiroUtil.md5(inputpwd, user.getSalt()))){
 			throw new IncorrectCredentialsException();
 		}
+		
 		return new SimpleAuthenticationInfo(user,inputpwd,getName());
 	}
 

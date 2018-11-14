@@ -28,7 +28,7 @@ public class PermissionAop {
 	@Around("cutPermission()")
 	public Object doPermission(ProceedingJoinPoint point) throws Throwable {
 		MethodSignature ms = (MethodSignature) point.getSignature();
-		Method method = ms.getMethod(); 		
+		Method method = ms.getMethod();
 		Permission permission = method.getAnnotation(Permission.class);
 		Object permissions = permission.value();
 		// 如果没有权限验证直接通过
@@ -39,6 +39,12 @@ public class PermissionAop {
 		if(user == null){
 			throw new NoUserException();
 		}
+		//redis中有用户数据，shiro中没有，以redis中数据为准，重新认证
+		else if(user == null) {
+			jedisService.authUser(JedisCacheConfig.USER_PREFIX.getMsg(point.getArgs()[0]+""));
+		}
+		//更新用户过期时间
+		jedisService.updateUserExpiryTime(JedisCacheConfig.USER_PREFIX.getMsg(point.getArgs()[0]+""));
 		//判断是否含有该角色code
 		if (!ShiroUtil.hasRole(permissions.toString())) {
 			throw new NoPermissionException();

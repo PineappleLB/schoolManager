@@ -79,4 +79,37 @@
       tips = #{tips,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="queryArchivesList" parameterType="java.util.Map" resultType="java.util.Map">
+  	SELECT 
+  		stu.id as id, 
+  		stu.name as name, 
+  		stu.gender as gender, 
+  		clas.classname as classname, 
+  		stu.nation as nation, 
+  		stu.specialty as specialty, 	
+		stu.birthday as birthday, 
+		stu.start_school_day as start_school_day, 
+		arch.home_address as home_address
+	FROM 
+		student stu 
+	LEFT JOIN 
+		classroom clas ON stu.class_id = clas.id
+	LEFT JOIN 
+		archives arch ON arch.sid = stu.id
+	WHERE 1=1
+	<if test="id != null and id != ''">
+		AND id = #{id}
+	</if>
+	<if test="name != null and name != ''">
+		AND name = #{name}
+	</if>
+	<if test="specialty != null and specialty != ''">
+		AND specialty = #{specialty}
+	</if>
+	<if test="classname != null and classname != ''">
+		AND clas.id = #{classname}
+	</if>
+  </select>
+  
 </mapper>

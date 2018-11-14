@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>club.pinea</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>schoolManager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -163,6 +163,11 @@
 			<version>1.8.0</version>
 			<scope>system</scope>
 			<systemPath>D:\java\jdk1.8.0_131\lib\tools.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-all</artifactId>
+			<version>5.10.0</version>
 		</dependency>
 	</dependencies>
 

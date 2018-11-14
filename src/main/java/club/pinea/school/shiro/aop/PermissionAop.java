@@ -41,7 +41,7 @@ public class PermissionAop {
 	@Around("cutPermission()")
 	public Object doPermission(ProceedingJoinPoint point) throws Throwable {
 		MethodSignature ms = (MethodSignature) point.getSignature();
-		Method method = ms.getMethod(); 		
+		Method method = ms.getMethod();
 		Permission permission = method.getAnnotation(Permission.class);
 		Object permissions = permission.value();
 		// 如果没有权限验证直接通过
@@ -55,19 +55,6 @@ public class PermissionAop {
 		}
 		//redis中有用户数据，shiro中没有，以redis中数据为准，重新认证
 		else if(user == null) {
-//			Subject subject = ShiroUtil.getSubject();
-//			UsernamePasswordToken token = new UsernamePasswordToken(jedisUser.getAccount(), jedisUser.getPassword());
-//			token.setRememberMe(true);
-//			try {
-//				//dbrealm进行认证
-//				subject.login(token);
-//				log.info("account:"+jedisUser.getAccount()+" 跨服务器登录系统成功！");
-//				return user;
-//			//dbrealm认证失败
-//			} catch (IncorrectCredentialsException e) {
-//				e.printStackTrace();
-//				log.error("account:"+jedisUser.getAccount()+" 跨服务器登录系统失败！");
-//			}
 			jedisService.authUser(JedisCacheConfig.USER_PREFIX.getMsg(point.getArgs()[0]+""));
 		}
 		//更新用户过期时间
